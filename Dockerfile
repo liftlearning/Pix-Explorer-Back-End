@@ -2,8 +2,10 @@ FROM node:lts-alpine
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
-
 COPY . .
 
-CMD ["npm", "run", "start"]
+RUN npm install
+
+EXPOSE 3000
+
+CMD ["node", "app.js"]
