@@ -1,10 +1,9 @@
 const express = require('express');
-var bodyParser = require('body-parser');
-var hash = require('object-hash');
+const { api_pix } = require('./mock_pix_api.js');
 const app = express();
-
 const port = process.env.PORT || 8000;
-app.use(bodyParser.json());
+
+app.use(express.json());
 
 app.get('/', (req, res) => {
   res.status(200).send({
@@ -14,23 +13,41 @@ app.get('/', (req, res) => {
   });
 });
 
+// Pix validation route
 app.post('/validate_pix', (req, res) => {
+
   console.log(req.body);
+ 
+  // check if any parameter is undefined or empty
   var e2e_id = req.body['e2e_id'];
   var pix_value = req.body['pix_value'];
   var pix_key = req.body['pix_key'];
-  
-  if([e2e_id,pix_value,pix_key].some(el => el === (undefined || ""))){
+
+  console.log(typeof e2e_id);
+  console.log(typeof pix_value);
+  console.log(typeof pix_key);
+
+  if([e2e_id,pix_value,pix_key].some(el => (el === (undefined || null) || el === ("")))){
     res.status(404).send({
-      message: "The parameter e2e_id, pix_value, pix_key must be passed!" 
+      message: "The parameters e2e_id, pix_value, pix_key must be passed!" 
     });
   }
-  
-  var pix_hash = hash(req.body)
+
+  // pix_value = 50 and pix_value = "50" generates different hashes
+  // string cast to treat these cases
+  var casted_json = {
+    'e2e_id':String(e2e_id), 
+    'pix_key':String(pix_value), 
+    'pix_value':String(pix_key)
+  }
+
+  // Simulate PIX API Response
+  response_api_pix = api_pix(casted_json);
 
   res.status(201).send({
-    message: pix_hash  
+    message: response_api_pix
   });
+
 });
 
 app.listen(port);
