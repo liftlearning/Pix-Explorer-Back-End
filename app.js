@@ -14,18 +14,11 @@ app.get('/', (req, res) => {
 });
 
 // Pix validation route
-app.post('/validate_pix', (req, res) => {
-
-  console.log(req.body);
- 
+app.post('/validate_pix', (req, res) => { 
   // check if any parameter is undefined or empty
   var e2e_id = req.body['e2e_id'];
   var pix_value = req.body['pix_value'];
   var pix_key = req.body['pix_key'];
-
-  console.log(typeof e2e_id);
-  console.log(typeof pix_value);
-  console.log(typeof pix_key);
 
   if([e2e_id,pix_value,pix_key].some(el => (el === (undefined || null) || el === ("")))){
     res.status(404).send({
@@ -42,7 +35,7 @@ app.post('/validate_pix', (req, res) => {
   }
 
   // Simulate PIX API Response
-  response_api_pix = api_pix(casted_json);
+  var response_api_pix = api_pix(casted_json);
 
   res.status(201).send({
     message: response_api_pix
