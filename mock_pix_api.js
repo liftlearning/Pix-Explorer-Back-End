@@ -12,7 +12,7 @@ const api_pix = (pix_data) => {
     }
 
     if (sum%2 !== 0) {
-        return "invalid";
+        return null;
     }
     else{
         return pix_hash;

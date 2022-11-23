@@ -38,11 +38,15 @@ app.post('/validate_pix', (req, res) => {
 
   // Simulate PIX API Response
   var response_api_pix = api_pix(casted_json);
-
-  res.status(201).send({
-    message: response_api_pix
+  if (response_api_pix !== null) {
+    res.status(201).send({
+      message: response_api_pix
+    });
+  }
+  
+  res.status(404).send({
+    message: 'Invalid pix validation'
   });
-
 });
 
 app.listen(port);
