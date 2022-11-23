@@ -1,9 +1,11 @@
 const express = require('express');
+const cors = require('cors')
 const { api_pix } = require('./mock_pix_api.js');
 const app = express();
 const port = process.env.PORT || 8000;
 
 app.use(express.json());
+app.use(cors());
 
 app.get('/', (req, res) => {
   res.status(200).send({
